@@ -55,7 +55,7 @@ public class EventManagement extends javax.swing.JFrame {
         eventList = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        backToDashboard = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         jTextField2.setText("jTextField1");
 
@@ -77,6 +77,8 @@ public class EventManagement extends javax.swing.JFrame {
         );
 
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));
+
+        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -292,12 +294,12 @@ public class EventManagement extends javax.swing.JFrame {
 
         jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Downloads\\gamay.jpg")); // NOI18N
 
-        backToDashboard.setBackground(new java.awt.Color(153, 153, 153));
-        backToDashboard.setFont(new java.awt.Font("Eras Medium ITC", 1, 24)); // NOI18N
-        backToDashboard.setText(">");
-        backToDashboard.addActionListener(new java.awt.event.ActionListener() {
+        btnBack.setBackground(new java.awt.Color(153, 153, 153));
+        btnBack.setFont(new java.awt.Font("Eras Medium ITC", 1, 24)); // NOI18N
+        btnBack.setText(">");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backToDashboardActionPerformed(evt);
+                btnBackActionPerformed(evt);
             }
         });
 
@@ -308,16 +310,14 @@ public class EventManagement extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(backToDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 803, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(181, 181, 181)
                     .addComponent(jLabel1)
-                    .addContainerGap(122, Short.MAX_VALUE)))
+                    .addContainerGap(130, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -326,7 +326,7 @@ public class EventManagement extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addComponent(backToDashboard)))
+                        .addComponent(btnBack)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(75, 75, 75))
@@ -364,9 +364,14 @@ public class EventManagement extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_eventNameActionPerformed
 
-    private void backToDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToDashboardActionPerformed
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_backToDashboardActionPerformed
+         Dashboard dashboard = new Dashboard();
+         dashboard.setLocationRelativeTo(null);
+         dashboard.setVisible(true);
+
+         this.dispose();
+    }//GEN-LAST:event_btnBackActionPerformed
 
     private void addEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventActionPerformed
         // TODO add your handling code here:
@@ -412,8 +417,8 @@ public class EventManagement extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Id;
     private javax.swing.JButton addEvent;
-    private javax.swing.JButton backToDashboard;
     private javax.swing.JPanel background;
+    private javax.swing.JButton btnBack;
     private javax.swing.JLabel date;
     private javax.swing.JButton deleteEvent;
     private javax.swing.JLabel description;
