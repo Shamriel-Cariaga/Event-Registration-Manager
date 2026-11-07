@@ -7,6 +7,8 @@
  *
  * @author user
  */
+import javax.swing.JOptionPane;
+
 public class Dashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
@@ -42,9 +44,9 @@ public class Dashboard extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnManageEvent = new javax.swing.JButton();
+        btnDashboard = new javax.swing.JButton();
+        btnRegistration = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         jButton4.setBackground(new java.awt.Color(204, 204, 204));
@@ -167,36 +169,36 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Downloads\\gamay.jpg")); // NOI18N
 
-        jButton2.setBackground(new java.awt.Color(73, 64, 100));
-        jButton2.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Manage Event");
-        jButton2.setBorder(null);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnManageEvent.setBackground(new java.awt.Color(73, 64, 100));
+        btnManageEvent.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        btnManageEvent.setForeground(new java.awt.Color(255, 255, 255));
+        btnManageEvent.setText("Manage Event");
+        btnManageEvent.setBorder(null);
+        btnManageEvent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnManageEventActionPerformed(evt);
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(73, 64, 100));
-        jButton3.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Dashboard");
-        jButton3.setBorder(null);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnDashboard.setBackground(new java.awt.Color(73, 64, 100));
+        btnDashboard.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        btnDashboard.setForeground(new java.awt.Color(255, 255, 255));
+        btnDashboard.setText("Dashboard");
+        btnDashboard.setBorder(null);
+        btnDashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnDashboardActionPerformed(evt);
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(73, 64, 100));
-        jButton5.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("Registration");
-        jButton5.setBorder(null);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistration.setBackground(new java.awt.Color(73, 64, 100));
+        btnRegistration.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        btnRegistration.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistration.setText("Registration");
+        btnRegistration.setBorder(null);
+        btnRegistration.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnRegistrationActionPerformed(evt);
             }
         });
 
@@ -215,9 +217,9 @@ public class Dashboard extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnManageEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -234,11 +236,11 @@ public class Dashboard extends javax.swing.JFrame {
                         .addGap(44, 44, 44)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnManageEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(268, Short.MAX_VALUE))))
         );
 
@@ -256,21 +258,34 @@ public class Dashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnManageEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageEventActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        
+        EventManagement event = new EventManagement();
+        event.setLocationRelativeTo(null);
+        event.setVisible(true);
+
+        this.dispose();
+    }//GEN-LAST:event_btnManageEventActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+         JOptionPane.showMessageDialog(this, "You are already in Dashboard.");
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnDashboardActionPerformed
+
+    private void btnRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrationActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+         ParticipantRegistration registration = new ParticipantRegistration();
+         registration.setLocationRelativeTo(null);
+         registration.setVisible(true);
+
+         this.dispose();
+    }//GEN-LAST:event_btnRegistrationActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -306,10 +321,10 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnDashboard;
+    private javax.swing.JButton btnManageEvent;
+    private javax.swing.JButton btnRegistration;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
