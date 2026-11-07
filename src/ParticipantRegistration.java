@@ -9,6 +9,37 @@
  */
 public class ParticipantRegistration extends javax.swing.JFrame {
     
+    private static String[][] registeredParticipants = new String[100][3];
+    private static int registeredCount = 0;
+    
+    private void displayParticipants() {
+        javax.swing.table.DefaultTableModel model =
+            (javax.swing.table.DefaultTableModel) jTable2.getModel();
+
+        model.setRowCount(0);
+
+        for (int i = 0; i < registeredCount; i++) {
+            model.addRow(new Object[]{
+                registeredParticipants[i][0],
+                registeredParticipants[i][1],
+                registeredParticipants[i][2]
+            });
+        }
+    }
+    private void loadParticipants() {
+    javax.swing.table.DefaultTableModel model =(javax.swing.table.DefaultTableModel) jTable2.getModel();
+
+    model.setRowCount(0);
+
+    for (int i = 0; i < Dashboard.participantCount; i++) {
+        model.addRow(new Object[]{
+            Dashboard.participants[i][0],
+            Dashboard.participants[i][1],
+            Dashboard.participants[i][4]
+        });
+    }
+}
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ParticipantRegistration.class.getName());
 
     /**
@@ -16,10 +47,17 @@ public class ParticipantRegistration extends javax.swing.JFrame {
      */
     public ParticipantRegistration() {
         initComponents();
-        ((javax.swing.table.DefaultTableModel) jTable2.getModel()).setRowCount(0);
+        loadParticipants();
+        displayParticipants();
+        
         setLocationRelativeTo(null);
         cmbSelectEvent.removeAllItems();
-        cmbSelectEvent.setEnabled(true);
+        cmbSelectEvent.removeAllItems();
+
+        String[] eventNames = EventManagement.getEventNames();
+        for (int i = 0; i < eventNames.length; i++) {
+            cmbSelectEvent.addItem(eventNames[i]);
+        }
 
         cmbSelectEvent.addItem("Birthday Party");
         cmbSelectEvent.addItem("Wedding");
@@ -607,18 +645,35 @@ public class ParticipantRegistration extends javax.swing.JFrame {
         String participant = name.getText();
         String participantEmail = email.getText();
         String regDate = date.getText();
-        String event = cmbSelectEvent.getSelectedItem().toString();
 
-        if (regID.isEmpty() || participant.isEmpty()
-                || participantEmail.isEmpty() || regDate.isEmpty()) {
-
+        if (id.getText().isEmpty() || name.getText().isEmpty()
+             || email.getText().isEmpty() || date.getText().isEmpty()
+             || cmbSelectEvent.getSelectedItem() == null) {
             javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+            return;
+        }
 
-        } else {
+        if (Dashboard.participantCount < 100) {
+
+            Dashboard.participants[Dashboard.participantCount][0] = id.getText();
+            Dashboard.participants[Dashboard.participantCount][1] = name.getText();
+            Dashboard.participants[Dashboard.participantCount][2] = email.getText();
+            Dashboard.participants[Dashboard.participantCount][3] = date.getText();
+            Dashboard.participants[Dashboard.participantCount][4] =
+                    cmbSelectEvent.getSelectedItem().toString();
+
+            Dashboard.participantCount++;
+            
             javax.swing.table.DefaultTableModel model =
-                    (javax.swing.table.DefaultTableModel) jTable2.getModel();
+            (javax.swing.table.DefaultTableModel) jTable2.getModel();
 
-            model.addRow(new Object[]{regID, participant, event});
+            model.addRow(new Object[]{
+                regID,
+                participant,
+                cmbSelectEvent.getSelectedItem().toString()
+            });
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Registration successful!");
 
         }
     }//GEN-LAST:event_registerActionPerformed

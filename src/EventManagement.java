@@ -53,29 +53,17 @@ private int linearSearch(String searchID) {
     public EventManagement() {
     initComponents();
 
-    // Remove the empty default rows from JTable
-    javax.swing.table.DefaultTableModel model =
-        (javax.swing.table.DefaultTableModel) tblEvents.getModel();
-
-    model.setRowCount(0);
+    displayEvents();
 
     // Automatically load selected event into text fields
     tblEvents.getSelectionModel().addListSelectionListener(e -> {
-
         if (!e.getValueIsAdjusting()) {
-
             int row = tblEvents.getSelectedRow();
-
             if (row >= 0) {
-
                 int modelRow = tblEvents.convertRowIndexToModel(row);
-
                 String id = tblEvents.getModel().getValueAt(modelRow, 0).toString();
-
                 int index = linearSearch(id);
-
                 if (index != -1) {
-
                     txtEventID.setText(events[index].eventID);
                     txtEventName.setText(events[index].eventName);
                     txtEventDate.setText(events[index].eventDate);
@@ -95,6 +83,14 @@ private int linearSearch(String searchID) {
     }
 
     return eventNames;
+}
+    
+    public static int getEventCount() {
+    return eventCount;
+}
+
+public static String getEventName(int index) {
+    return events[index].eventName;
 }
     
     // DISPLAY EVENTS IN JTABLE
@@ -231,8 +227,8 @@ private void displayEvents() {
         txtEventTime.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtEventDescription.setColumns(20);
+        txtEventDescription.setForeground(new java.awt.Color(0, 0, 0));
         txtEventDescription.setRows(5);
-        txtEventDescription.setText("Enter event description...");
         txtEventDescription.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPane2.setViewportView(txtEventDescription);
 
@@ -321,11 +317,11 @@ private void displayEvents() {
                 .addGap(17, 17, 17)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEventID, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtEventDate, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtEventDate, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                             .addComponent(Id, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEventID))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(time)
@@ -397,10 +393,6 @@ private void displayEvents() {
 
         jScrollPane3.setViewportView(jPanel4);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Downloads\\gamay.jpg")); // NOI18N
-
-        jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Downloads\\gamay.jpg")); // NOI18N
-
         btnBack.setBackground(new java.awt.Color(153, 153, 153));
         btnBack.setFont(new java.awt.Font("Eras Medium ITC", 1, 24)); // NOI18N
         btnBack.setText(">");
@@ -414,12 +406,14 @@ private void displayEvents() {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(181, 181, 181)
@@ -429,12 +423,10 @@ private void displayEvents() {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(btnBack)))
+                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBack)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 836, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
@@ -595,54 +587,51 @@ clearFields();
        int index = linearSearch(id);
 
        if (index == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this,"Event not found!");
+        return;
+        }
 
-       javax.swing.JOptionPane.showMessageDialog(this,
-        "Event not found!");
+    // CONFIRM DELETION
+    int confirm = javax.swing.JOptionPane.showConfirmDialog(
+        this,
+        "Are you sure you want to delete this event?",
+        "Delete Event",
+        javax.swing.JOptionPane.YES_NO_OPTION
+    );
 
-    return;
-}
+    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
 
-// CONFIRM DELETION
-int confirm = javax.swing.JOptionPane.showConfirmDialog(
-    this,
-    "Are you sure you want to delete this event?",
-    "Delete Event",
-    javax.swing.JOptionPane.YES_NO_OPTION
-);
+        // REMOVE EVENT BY SHIFTING ARRAY ELEMENTS
+        for (int i = index; i < eventCount - 1; i++) {
+            events[i] = events[i + 1];
+        }
 
-if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        events[eventCount - 1] = null;
+        eventCount--;
 
-    // REMOVE EVENT BY SHIFTING ARRAY ELEMENTS
-    for (int i = index; i < eventCount - 1; i++) {
-        events[i] = events[i + 1];
+        // REFRESH TABLE
+        displayEvents();
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Event deleted successfully!");
+
+        clearFields();
     }
-
-    events[eventCount - 1] = null;
-    eventCount--;
-
-    // REFRESH TABLE
-    displayEvents();
-
-    javax.swing.JOptionPane.showMessageDialog(this,
-        "Event deleted successfully!");
-
-    clearFields();
-}
 
 
     }//GEN-LAST:event_btnDeleteActionPerformed
-// CLEAR ALL INPUT FIELDS
-private void clearFields() {
+    // CLEAR ALL INPUT FIELDS
+    private void clearFields() {
 
-    txtEventID.setText("");
-    txtEventName.setText("");
-    txtEventDate.setText("");
-    txtEventTime.setText("");
-    txtEventLocation.setText("");
-    txtEventDescription.setText("");
+        txtEventID.setText("");
+        txtEventName.setText("");
+        txtEventDate.setText("");
+        txtEventTime.setText("");
+        txtEventLocation.setText("");
+        txtEventDescription.setText("");
 
-    tblEvents.clearSelection();
-}
+        tblEvents.clearSelection();
+    }
     private void txtEventLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEventLocationActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEventLocationActionPerformed
