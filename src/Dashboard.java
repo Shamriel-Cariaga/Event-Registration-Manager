@@ -11,6 +11,28 @@ import javax.swing.JOptionPane;
 
 public class Dashboard extends javax.swing.JFrame {
     
+    public static String[][] participants = new String[100][5];
+    public static int participantCount = 0;
+
+    public static String[] events = new String[100];
+    public static int eventCount = 0;
+    
+    private void loadDashboardTable() {
+
+    javax.swing.table.DefaultTableModel model =
+            (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+    model.setRowCount(0);
+
+    for (int i = 0; i < participantCount; i++) {
+
+        model.addRow(new Object[]{
+            participants[i][1],
+            participants[i][4]
+        });
+    }
+}
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
 
     /**
@@ -18,6 +40,8 @@ public class Dashboard extends javax.swing.JFrame {
      */
     public Dashboard() {
         initComponents();
+        loadParticipants();
+        loadDashboardTable();
     }
 
     /**
@@ -254,7 +278,62 @@ public class Dashboard extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private void loadParticipants() {
 
+        javax.swing.table.DefaultTableModel model =
+                (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+        model.setRowCount(0);
+
+        for (int i = 0; i < participantCount; i++) {
+
+            model.addRow(new Object[]{
+                participants[i][1],
+                participants[i][4]
+            });
+        }
+    }
+    
+    private void totalEvents() {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Total Events: " + EventManagement.getEventNames().length);
+    }
+
+    private void totalParticipants() {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Total Registered Participants: " + participantCount);
+    }
+
+    private void upcomingEvents() {
+
+        String list = "";
+        String[] eventNames = EventManagement.getEventNames();
+
+        for (int i = 0; i < eventNames.length; i++) {
+            list += eventNames[i] + "\n";
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+                list, "Upcoming Events",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void recentRegistrations() {
+
+        String list = "";
+
+        for (int i = participantCount - 1; i >= 0; i--) {
+            list += participants[i][1] + " - " + participants[i][4] + "\n";
+        }
+
+        if (list.isEmpty()) {
+            list = "No registrations yet.";
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this, list, "Recent Registrations",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     private void btnManageEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageEventActionPerformed
         // TODO add your handling code here:
         
