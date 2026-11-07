@@ -6,14 +6,115 @@
 
 public class EventManagement extends javax.swing.JFrame {
     
+    // ARRAY FOR STORING EVENTS
+    private static EventData[] events = new EventData[100];
+    private static int eventCount = 0;
+
+    // EVENT DATA CLASS
+    private static class EventData {
+    String eventID;
+    String eventName;
+    String eventDate;
+    String eventTime;
+    String eventLocation;
+    String eventDescription;
+
+    EventData(String id, String name, String date,
+              String time, String location, String description) {
+
+        this.eventID = id;
+        this.eventName = name;
+        this.eventDate = date;
+        this.eventTime = time;
+        this.eventLocation = location;
+        this.eventDescription = description;
+    }
+    
+    
+}
+    // LINEAR SEARCH BY EVENT ID
+private int linearSearch(String searchID) {
+
+    for (int i = 0; i < eventCount; i++) {
+
+        if (events[i].eventID.equalsIgnoreCase(searchID)) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EventManagement.class.getName());
 
     /**
      * Creates new form EventManagement
      */
     public EventManagement() {
-        initComponents();
+    initComponents();
+
+    // Remove the empty default rows from JTable
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) tblEvents.getModel();
+
+    model.setRowCount(0);
+
+    // Automatically load selected event into text fields
+    tblEvents.getSelectionModel().addListSelectionListener(e -> {
+
+        if (!e.getValueIsAdjusting()) {
+
+            int row = tblEvents.getSelectedRow();
+
+            if (row >= 0) {
+
+                int modelRow = tblEvents.convertRowIndexToModel(row);
+
+                String id = tblEvents.getModel().getValueAt(modelRow, 0).toString();
+
+                int index = linearSearch(id);
+
+                if (index != -1) {
+
+                    txtEventID.setText(events[index].eventID);
+                    txtEventName.setText(events[index].eventName);
+                    txtEventDate.setText(events[index].eventDate);
+                    txtEventTime.setText(events[index].eventTime);
+                    txtEventLocation.setText(events[index].eventLocation);
+                    txtEventDescription.setText(events[index].eventDescription);
+                }
+            }
+        }
+    });
+}
+    public static String[] getEventNames() {
+    String[] eventNames = new String[eventCount];
+
+    for (int i = 0; i < eventCount; i++) {
+        eventNames[i] = events[i].eventName;
     }
+
+    return eventNames;
+}
+    
+    // DISPLAY EVENTS IN JTABLE
+private void displayEvents() {
+
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) tblEvents.getModel();
+
+    model.setRowCount(0);
+
+    for (int i = 0; i < eventCount; i++) {
+
+        model.addRow(new Object[]{
+            events[i].eventID,
+            events[i].eventName,
+            events[i].eventDate,
+            events[i].eventLocation
+        });
+    }
+}
     
 
     /**
@@ -39,20 +140,21 @@ public class EventManagement extends javax.swing.JFrame {
         name = new javax.swing.JLabel();
         description = new javax.swing.JLabel();
         time = new javax.swing.JLabel();
-        eventDate = new javax.swing.JTextField();
-        eventID = new javax.swing.JTextField();
-        eventLocation = new javax.swing.JTextField();
-        eventName = new javax.swing.JTextField();
-        eventTime = new javax.swing.JTextField();
+        txtEventDate = new javax.swing.JTextField();
+        txtEventID = new javax.swing.JTextField();
+        txtEventLocation = new javax.swing.JTextField();
+        txtEventName = new javax.swing.JTextField();
+        txtEventTime = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        eventDescription = new javax.swing.JTextArea();
-        addEvent = new javax.swing.JButton();
-        updateEvent = new javax.swing.JButton();
-        deleteEvent = new javax.swing.JButton();
+        txtEventDescription = new javax.swing.JTextArea();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         background = new javax.swing.JPanel();
         lists = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        eventList = new javax.swing.JTable();
+        tblEvents = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
@@ -103,64 +205,64 @@ public class EventManagement extends javax.swing.JFrame {
         time.setFont(new java.awt.Font("Eras Medium ITC", 1, 12)); // NOI18N
         time.setText("Event Time");
 
-        eventDate.setText("MM/DD/YYYY");
-        eventDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtEventDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        eventID.setText("Enter ID");
-        eventID.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        eventLocation.setText("Enter event location");
-        eventLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        eventLocation.addActionListener(new java.awt.event.ActionListener() {
+        txtEventID.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtEventID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eventLocationActionPerformed(evt);
+                txtEventIDActionPerformed(evt);
             }
         });
 
-        eventName.setText("Enter event name");
-        eventName.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        eventName.addActionListener(new java.awt.event.ActionListener() {
+        txtEventLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtEventLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eventNameActionPerformed(evt);
+                txtEventLocationActionPerformed(evt);
             }
         });
 
-        eventTime.setText("Enter event time");
-        eventTime.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        eventDescription.setColumns(20);
-        eventDescription.setRows(5);
-        eventDescription.setText("Enter event description...");
-        eventDescription.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jScrollPane2.setViewportView(eventDescription);
-
-        addEvent.setBackground(new java.awt.Color(204, 204, 255));
-        addEvent.setFont(new java.awt.Font("Eras Medium ITC", 1, 12)); // NOI18N
-        addEvent.setText("Add Event");
-        addEvent.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        addEvent.addActionListener(new java.awt.event.ActionListener() {
+        txtEventName.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtEventName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addEventActionPerformed(evt);
+                txtEventNameActionPerformed(evt);
             }
         });
 
-        updateEvent.setBackground(new java.awt.Color(204, 204, 255));
-        updateEvent.setFont(new java.awt.Font("Eras Medium ITC", 1, 12)); // NOI18N
-        updateEvent.setText("Update");
-        updateEvent.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        updateEvent.addActionListener(new java.awt.event.ActionListener() {
+        txtEventTime.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        txtEventDescription.setColumns(20);
+        txtEventDescription.setRows(5);
+        txtEventDescription.setText("Enter event description...");
+        txtEventDescription.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jScrollPane2.setViewportView(txtEventDescription);
+
+        btnAdd.setBackground(new java.awt.Color(204, 204, 255));
+        btnAdd.setFont(new java.awt.Font("Eras Medium ITC", 1, 12)); // NOI18N
+        btnAdd.setText("Add Event");
+        btnAdd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateEventActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
-        deleteEvent.setBackground(new java.awt.Color(204, 204, 255));
-        deleteEvent.setFont(new java.awt.Font("Eras Medium ITC", 1, 12)); // NOI18N
-        deleteEvent.setText("Delete");
-        deleteEvent.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        deleteEvent.addActionListener(new java.awt.event.ActionListener() {
+        btnUpdate.setBackground(new java.awt.Color(204, 204, 255));
+        btnUpdate.setFont(new java.awt.Font("Eras Medium ITC", 1, 12)); // NOI18N
+        btnUpdate.setText("Update");
+        btnUpdate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteEventActionPerformed(evt);
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(204, 204, 255));
+        btnDelete.setFont(new java.awt.Font("Eras Medium ITC", 1, 12)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -169,8 +271,8 @@ public class EventManagement extends javax.swing.JFrame {
         lists.setFont(new java.awt.Font("Eras Medium ITC", 1, 14)); // NOI18N
         lists.setText("Available Events");
 
-        eventList.setFont(new java.awt.Font("Eras Medium ITC", 0, 12)); // NOI18N
-        eventList.setModel(new javax.swing.table.DefaultTableModel(
+        tblEvents.setFont(new java.awt.Font("Eras Medium ITC", 0, 12)); // NOI18N
+        tblEvents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -181,29 +283,34 @@ public class EventManagement extends javax.swing.JFrame {
                 "Event ID", "Event Name", "Date", "Venue"
             }
         ));
-        eventList.setSelectionBackground(new java.awt.Color(0, 51, 102));
-        eventList.setSelectionForeground(new java.awt.Color(153, 153, 153));
-        jScrollPane1.setViewportView(eventList);
+        tblEvents.setSelectionBackground(new java.awt.Color(0, 51, 102));
+        tblEvents.setSelectionForeground(new java.awt.Color(153, 153, 153));
+        jScrollPane1.setViewportView(tblEvents);
+
+        jScrollPane4.setViewportView(jScrollPane1);
 
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
         backgroundLayout.setHorizontalGroup(
             backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(backgroundLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
                 .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lists, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 733, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                    .addGroup(backgroundLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(lists, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(backgroundLayout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 733, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         backgroundLayout.setVerticalGroup(
             backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(backgroundLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(lists)
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -215,20 +322,20 @@ public class EventManagement extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(eventID, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(eventDate, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEventID, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEventDate, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Id, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(time)
-                            .addComponent(eventTime, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(eventName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEventTime, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEventName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(name))
                         .addGap(147, 147, 147))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(eventLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEventLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(venue, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(description, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 734, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -238,11 +345,11 @@ public class EventManagement extends javax.swing.JFrame {
                             .addComponent(jLabel10)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
-                                .addComponent(addEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(37, 37, 37)
-                                .addComponent(updateEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(41, 41, 41)
-                                .addComponent(deleteEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
@@ -260,32 +367,32 @@ public class EventManagement extends javax.swing.JFrame {
                     .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(eventID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(eventName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtEventID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEventName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(time, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(eventDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(eventTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtEventDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEventTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(venue, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(eventLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtEventLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
                 .addComponent(description, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(updateEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(158, Short.MAX_VALUE))
         );
 
         jScrollPane3.setViewportView(jPanel4);
@@ -328,8 +435,7 @@ public class EventManagement extends javax.swing.JFrame {
                         .addGap(26, 26, 26)
                         .addComponent(btnBack)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 836, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(424, 424, 424)
@@ -360,9 +466,9 @@ public class EventManagement extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void eventNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eventNameActionPerformed
+    private void txtEventNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEventNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_eventNameActionPerformed
+    }//GEN-LAST:event_txtEventNameActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
@@ -373,21 +479,177 @@ public class EventManagement extends javax.swing.JFrame {
          this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void addEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_addEventActionPerformed
+        String id = txtEventID.getText().trim();
+        String eventName = txtEventName.getText().trim();
+        String eventDate = txtEventDate.getText().trim();
+        String eventTime = txtEventTime.getText().trim();
+        String location = txtEventLocation.getText().trim();
+        String description = txtEventDescription.getText().trim();
 
-    private void updateEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateEventActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_updateEventActionPerformed
+       // VALIDATION
+      if (id.isEmpty() || id.equalsIgnoreCase("Enter ID") ||
+          eventName.isEmpty() || eventName.equalsIgnoreCase("Enter event name") ||
+          eventDate.isEmpty() || eventDate.equalsIgnoreCase("MM/DD/YYYY") ||
+          eventTime.isEmpty() || eventTime.equalsIgnoreCase("Enter event time") ||
+          location.isEmpty() || location.equalsIgnoreCase("Enter event location") ||
+          description.isEmpty() || description.equalsIgnoreCase("Enter event description...")) {
 
-    private void deleteEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteEventActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_deleteEventActionPerformed
+          javax.swing.JOptionPane.showMessageDialog(this,
+              "Please complete all event information.");
 
-    private void eventLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eventLocationActionPerformed
+          return;
+}
+
+// CHECK ARRAY CAPACITY
+if (eventCount >= events.length) {
+
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Event storage is full!");
+
+    return;
+}
+
+// CHECK DUPLICATE EVENT ID USING LINEAR SEARCH
+if (linearSearch(id) != -1) {
+
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Event ID already exists!");
+
+    return;
+}
+
+// ADD EVENT TO ARRAY
+events[eventCount] = new EventData(
+    id, eventName, eventDate, eventTime, location, description
+);
+
+eventCount++;
+
+// UPDATE JTABLE
+displayEvents();
+
+javax.swing.JOptionPane.showMessageDialog(this,
+    "Event added successfully!");
+
+// CLEAR FIELDS
+clearFields();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_eventLocationActionPerformed
+        String id = txtEventID.getText().trim();
+
+       // SEARCH EVENT USING LINEAR SEARCH
+       int index = linearSearch(id);
+
+       if (index == -1) {
+
+       javax.swing.JOptionPane.showMessageDialog(this,
+        "Event not found!");
+
+       return;
+}
+
+String eventName = txtEventName.getText().trim();
+String eventDate = txtEventDate.getText().trim();
+String eventTime = txtEventTime.getText().trim();
+String location = txtEventLocation.getText().trim();
+String description = txtEventDescription.getText().trim();
+
+// VALIDATION
+if (eventName.isEmpty() || eventName.equalsIgnoreCase("Enter event name") ||
+    eventDate.isEmpty() || eventDate.equalsIgnoreCase("MM/DD/YYYY") ||
+    eventTime.isEmpty() || eventTime.equalsIgnoreCase("Enter event time") ||
+    location.isEmpty() || location.equalsIgnoreCase("Enter event location") ||
+    description.isEmpty() || description.equalsIgnoreCase("Enter event description...")) {
+
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Please complete all event information.");
+
+    return;
+}
+
+// UPDATE ARRAY RECORD
+events[index].eventName = eventName;
+events[index].eventDate = eventDate;
+events[index].eventTime = eventTime;
+events[index].eventLocation = location;
+events[index].eventDescription = description;
+
+// REFRESH TABLE
+displayEvents();
+
+javax.swing.JOptionPane.showMessageDialog(this,
+    "Event updated successfully!");
+
+clearFields();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        String id = txtEventID.getText().trim();
+
+       // SEARCH EVENT USING LINEAR SEARCH
+       int index = linearSearch(id);
+
+       if (index == -1) {
+
+       javax.swing.JOptionPane.showMessageDialog(this,
+        "Event not found!");
+
+    return;
+}
+
+// CONFIRM DELETION
+int confirm = javax.swing.JOptionPane.showConfirmDialog(
+    this,
+    "Are you sure you want to delete this event?",
+    "Delete Event",
+    javax.swing.JOptionPane.YES_NO_OPTION
+);
+
+if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+
+    // REMOVE EVENT BY SHIFTING ARRAY ELEMENTS
+    for (int i = index; i < eventCount - 1; i++) {
+        events[i] = events[i + 1];
+    }
+
+    events[eventCount - 1] = null;
+    eventCount--;
+
+    // REFRESH TABLE
+    displayEvents();
+
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Event deleted successfully!");
+
+    clearFields();
+}
+
+
+    }//GEN-LAST:event_btnDeleteActionPerformed
+// CLEAR ALL INPUT FIELDS
+private void clearFields() {
+
+    txtEventID.setText("");
+    txtEventName.setText("");
+    txtEventDate.setText("");
+    txtEventTime.setText("");
+    txtEventLocation.setText("");
+    txtEventDescription.setText("");
+
+    tblEvents.clearSelection();
+}
+    private void txtEventLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEventLocationActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEventLocationActionPerformed
+
+    private void txtEventIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEventIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEventIDActionPerformed
 
     /**
      * @param args the command line arguments
@@ -416,19 +678,13 @@ public class EventManagement extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Id;
-    private javax.swing.JButton addEvent;
     private javax.swing.JPanel background;
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel date;
-    private javax.swing.JButton deleteEvent;
     private javax.swing.JLabel description;
-    private javax.swing.JTextField eventDate;
-    private javax.swing.JTextArea eventDescription;
-    private javax.swing.JTextField eventID;
-    private javax.swing.JTable eventList;
-    private javax.swing.JTextField eventLocation;
-    private javax.swing.JTextField eventName;
-    private javax.swing.JTextField eventTime;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
@@ -438,12 +694,19 @@ public class EventManagement extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JLabel lists;
     private javax.swing.JLabel name;
+    private javax.swing.JTable tblEvents;
     private javax.swing.JLabel time;
-    private javax.swing.JButton updateEvent;
+    private javax.swing.JTextField txtEventDate;
+    private javax.swing.JTextArea txtEventDescription;
+    private javax.swing.JTextField txtEventID;
+    private javax.swing.JTextField txtEventLocation;
+    private javax.swing.JTextField txtEventName;
+    private javax.swing.JTextField txtEventTime;
     private javax.swing.JLabel venue;
     // End of variables declaration//GEN-END:variables
 }
