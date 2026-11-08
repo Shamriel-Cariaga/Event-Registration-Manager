@@ -204,7 +204,6 @@ private void loadDashboardTable(String keyword) {
 
         jScrollPane2.setViewportView(jScrollPane1);
 
-        jTextField1.setText(" Search...");
         jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

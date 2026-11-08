@@ -843,48 +843,60 @@ javax.swing.JOptionPane.showMessageDialog(this,
         String email = txtEmail.getText().trim();
         String date = txtDate.getText().trim();
 
-        if (id.isEmpty() || name.isEmpty() || email.isEmpty() || date.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this,
-        "Please complete all fields.");
+    // Check empty fields
+    if (id.isEmpty() || name.isEmpty() || email.isEmpty() || date.isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+            "Please complete all fields.");
         return;
     }
 
-if (!cmbSelectEvent.isEnabled() || cmbSelectEvent.getSelectedItem() == null) {
-    javax.swing.JOptionPane.showMessageDialog(this,
-        "Please create an event first.");
-    return;
-}
+    // Check event selection
+    if (!cmbSelectEvent.isEnabled()
+            || cmbSelectEvent.getSelectedItem() == null
+            || cmbSelectEvent.getSelectedItem().toString().equals("No events available")) {
 
-if (registeredCount >= registeredParticipants.length) {
-    javax.swing.JOptionPane.showMessageDialog(this,
-        "Registration storage is full.");
-    return;
-}
+        JOptionPane.showMessageDialog(this,
+            "Please create an event first.");
+        return;
+    }
 
-if (linearSearch(id) != -1) {
-    javax.swing.JOptionPane.showMessageDialog(this,
-        "Registration ID already exists.");
-    return;
-}
+    // Check array capacity
+    if (registeredCount >= registeredParticipants.length) {
+        JOptionPane.showMessageDialog(this,
+            "Registration storage is full.");
+        return;
+    }
 
-String event = cmbSelectEvent.getSelectedItem().toString();
+    // Check duplicate Registration ID
+    if (linearSearch(id) != -1) {
+        JOptionPane.showMessageDialog(this,
+            "Registration ID already exists.");
+        return;
+    }
 
-registeredParticipants[registeredCount][0] = id;
-registeredParticipants[registeredCount][1] = name;
-registeredParticipants[registeredCount][2] = email;
-registeredParticipants[registeredCount][3] = date;
-registeredParticipants[registeredCount][4] = event;
+    String event = cmbSelectEvent.getSelectedItem().toString();
 
-registeredCount++;
+    // Recreate array row if it was previously deleted
+    if (registeredParticipants[registeredCount] == null) {
+        registeredParticipants[registeredCount] = new String[5];
+    }
 
-saveRegistrations();
+    // Store participant information
+    registeredParticipants[registeredCount][0] = id;
+    registeredParticipants[registeredCount][1] = name;
+    registeredParticipants[registeredCount][2] = email;
+    registeredParticipants[registeredCount][3] = date;
+    registeredParticipants[registeredCount][4] = event;
 
-displayParticipants();
+    registeredCount++;
 
-javax.swing.JOptionPane.showMessageDialog(this,
-    "Participant registered successfully!");
+    saveRegistrations();
+    displayParticipants();
 
-clearFields();
+    JOptionPane.showMessageDialog(this,
+        "Participant registered successfully!");
+
+    clearFields();
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
