@@ -83,7 +83,7 @@ private static void saveRegistrations() {
 }
 
 // LOAD REGISTRATIONS FROM TEXT FILE
-private static void loadRegistrations() {
+public static void loadRegistrations() {
 
     registeredCount = 0;
 
@@ -127,6 +127,22 @@ private static void loadRegistrations() {
             "Error loading registrations: " + e.getMessage()
         );
     }
+    
+}
+
+// GET TOTAL REGISTERED PARTICIPANTS
+public static int getRegisteredCount() {
+    return registeredCount;
+}
+
+// GET PARTICIPANT NAME
+public static String getParticipantName(int index) {
+    return registeredParticipants[index][1];
+}
+
+// GET PARTICIPANT EVENT
+public static String getParticipantEvent(int index) {
+    return registeredParticipants[index][4];
 }
 
 private void clearFields() {
@@ -160,6 +176,8 @@ private void clearFields() {
     private void loadEventsIntoComboBox() {
     cmbSelectEvent.removeAllItems();
 
+    EventManagement.loadEvents();
+
     String[] eventNames = EventManagement.getEventNames();
 
     if (eventNames.length == 0) {
@@ -171,10 +189,7 @@ private void clearFields() {
         for (int i = 0; i < eventNames.length; i++) {
             cmbSelectEvent.addItem(eventNames[i]);
         }
-        
     }
-    
-    
 }
     
     
@@ -447,6 +462,7 @@ private void clearFields() {
 
         btnSearch.setBackground(new java.awt.Color(204, 204, 255));
         btnSearch.setText("Search");
+        btnSearch.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchActionPerformed(evt);
@@ -502,6 +518,7 @@ private void clearFields() {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel16.setText("Select Events");
 
+        btnRegister.setBackground(new java.awt.Color(204, 204, 255));
         btnRegister.setText("Register");
         btnRegister.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
@@ -510,6 +527,7 @@ private void clearFields() {
             }
         });
 
+        btnClear.setBackground(new java.awt.Color(204, 204, 255));
         btnClear.setText("Clear");
         btnClear.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -521,6 +539,7 @@ private void clearFields() {
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel17.setText("Registered Participant");
 
+        btnUpdate.setBackground(new java.awt.Color(204, 204, 255));
         btnUpdate.setText("Update");
         btnUpdate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -573,7 +592,7 @@ private void clearFields() {
                                 .addGap(200, 200, 200)
                                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSearch))
+                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(30, 30, 30)

@@ -11,38 +11,85 @@ import javax.swing.JOptionPane;
 
 public class Dashboard extends javax.swing.JFrame {
     
-    public static String[][] participants = new String[100][5];
-    public static int participantCount = 0;
-
-    public static String[] events = new String[100];
-    public static int eventCount = 0;
-    
-    private void loadDashboardTable() {
-
-    javax.swing.table.DefaultTableModel model =
-            (javax.swing.table.DefaultTableModel) jTable1.getModel();
-
-    model.setRowCount(0);
-
-    for (int i = 0; i < participantCount; i++) {
-
-        model.addRow(new Object[]{
-            participants[i][1],
-            participants[i][4]
-        });
-    }
-}
-    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Dashboard.class.getName());
 
     /**
      * Creates new form Dashboard
      */
     public Dashboard() {
-        initComponents();
-        loadParticipants();
-        loadDashboardTable();
+    initComponents();
+    setLocationRelativeTo(null);
+
+    // LOAD DATA FROM THE OTHER FORMS
+    EventManagement.loadEvents();
+    ParticipantRegistration.loadRegistrations();
+
+    // DISPLAY DASHBOARD INFORMATION
+    updateDashboard();
+    loadDashboardTable("");
+}
+
+// UPDATE DASHBOARD COUNTERS
+private void updateDashboard() {
+
+    int totalEvents = EventManagement.getEventCount();
+    int totalParticipants = ParticipantRegistration.getRegisteredCount();
+
+    int upcomingCount = 0;
+
+    java.time.LocalDate today = java.time.LocalDate.now();
+
+    for (int i = 0; i < totalEvents; i++) {
+
+        try {
+            java.time.LocalDate eventDate =
+                java.time.LocalDate.parse(
+                    EventManagement.getEventDate(i),
+                    java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                );
+
+            if (!eventDate.isBefore(today)) {
+                upcomingCount++;
+            }
+
+        } catch (java.time.format.DateTimeParseException e) {
+            System.out.println("Invalid event date.");
+        }
     }
+
+    jLabel6.setText("Total Events: " + totalEvents);
+    jLabel7.setText("Total Registered Participants: " + totalParticipants);
+    jLabel5.setText("Upcoming Events: " + upcomingCount);
+    jLabel8.setText("Recent Registration: " +
+    (totalParticipants > 0 ? ParticipantRegistration.getParticipantName(totalParticipants - 1) : "None"));
+}
+
+// DISPLAY REGISTRATIONS IN DASHBOARD TABLE
+private void loadDashboardTable(String keyword) {
+
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+    model.setRowCount(0);
+
+    int total = ParticipantRegistration.getRegisteredCount();
+
+    for (int i = 0; i < total; i++) {
+
+        String name = ParticipantRegistration.getParticipantName(i);
+        String event = ParticipantRegistration.getParticipantEvent(i);
+
+        if (keyword.isEmpty() ||
+            name.toLowerCase().contains(keyword.toLowerCase()) ||
+            event.toLowerCase().contains(keyword.toLowerCase())) {
+
+            model.addRow(new Object[]{
+                name,
+                event
+            });
+        }
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,6 +101,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton4 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -94,13 +142,14 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(41, 43, 64));
         jLabel3.setText("Dashboard");
 
-        jLabel5.setText("           Upcoming Events");
+        jLabel5.setText("Upcoming Events");
         jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
 
-        jLabel6.setText("              Total Events");
+        jLabel6.setText("Total Events");
         jLabel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
 
-        jLabel7.setText(" Total Registered Participant");
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel7.setText("Total Registered Participant");
         jLabel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
 
         jLabel8.setText("         Recent Registration");
@@ -261,9 +310,9 @@ public class Dashboard extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(28, 28, 28)
+                .addGap(16, 16, 16)
                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 465, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -291,62 +340,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private void loadParticipants() {
 
-        javax.swing.table.DefaultTableModel model =
-                (javax.swing.table.DefaultTableModel) jTable1.getModel();
-
-        model.setRowCount(0);
-
-        for (int i = 0; i < participantCount; i++) {
-
-            model.addRow(new Object[]{
-                participants[i][1],
-                participants[i][4]
-            });
-        }
-    }
-    
-    private void totalEvents() {
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Total Events: " + EventManagement.getEventNames().length);
-    }
-
-    private void totalParticipants() {
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Total Registered Participants: " + participantCount);
-    }
-
-    private void upcomingEvents() {
-
-        String list = "";
-        String[] eventNames = EventManagement.getEventNames();
-
-        for (int i = 0; i < eventNames.length; i++) {
-            list += eventNames[i] + "\n";
-        }
-
-        javax.swing.JOptionPane.showMessageDialog(this,
-                list, "Upcoming Events",
-                javax.swing.JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void recentRegistrations() {
-
-        String list = "";
-
-        for (int i = participantCount - 1; i >= 0; i--) {
-            list += participants[i][1] + " - " + participants[i][4] + "\n";
-        }
-
-        if (list.isEmpty()) {
-            list = "No registrations yet.";
-        }
-
-        javax.swing.JOptionPane.showMessageDialog(this, list, "Recent Registrations",
-                javax.swing.JOptionPane.INFORMATION_MESSAGE);
-    }
-    
     private void btnManageEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageEventActionPerformed
         // TODO add your handling code here:
         
@@ -381,41 +375,22 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
-        // TODO add your handling code here:
-        String search = jTextField1.getText().trim();
+        // TODO add your handling code here
+        String keyword = jTextField1.getText().trim();
 
-        javax.swing.table.DefaultTableModel model =
-                (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        if (keyword.equalsIgnoreCase("Search...")) {
+            keyword = "";
+    }
 
-        javax.swing.table.TableRowSorter<javax.swing.table.DefaultTableModel> sorter =
-                new javax.swing.table.TableRowSorter<>(model);
+    loadDashboardTable(keyword);
 
-        jTable1.setRowSorter(sorter);
+    if (!keyword.isEmpty() && jTable1.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(
+            this,
+            "No matching records found."
+        );
+    }
 
-        if (search.isEmpty() || search.equalsIgnoreCase("Search...")) {
-            sorter.setRowFilter(null);
-        } else {
-            sorter.setRowFilter(new javax.swing.RowFilter<javax.swing.table.DefaultTableModel, Integer>() {
-                public boolean include(
-                        javax.swing.RowFilter.Entry<? extends javax.swing.table.DefaultTableModel, ? extends Integer> entry) {
-
-                    for (int i = 0; i < entry.getValueCount(); i++) {
-                        String value = entry.getStringValue(i);
-
-                        if (value.toLowerCase().contains(search.toLowerCase())) {
-                            return true;
-                        }
-                    }
-
-                    return false;
-                }
-            });
-        }
-
-        if (jTable1.getRowCount() == 0 && !search.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(
-                    Dashboard.this, "No matching records found.");
-        }
     }//GEN-LAST:event_searchActionPerformed
 
     /**
@@ -461,6 +436,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JButton search;

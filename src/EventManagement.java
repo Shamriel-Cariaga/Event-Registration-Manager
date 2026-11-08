@@ -95,7 +95,7 @@ private static void saveEvents() {
 }
 
 // LOAD EVENTS FROM TEXT FILE
-private static void loadEvents() {
+public static void loadEvents() {
 
     eventCount = 0;
 
@@ -190,6 +190,10 @@ private static void loadEvents() {
 
 public static String getEventName(int index) {
     return events[index].eventName;
+}
+
+public static String getEventDate(int index) {
+    return events[index].eventDate;
 }
     
     // DISPLAY EVENTS IN JTABLE
@@ -608,9 +612,6 @@ events[eventCount] = new EventData(
 eventCount++;
 
 saveEvents();
-
-// UPDATE JTABLE
-displayEvents();
 
 // UPDATE JTABLE
 displayEvents();
