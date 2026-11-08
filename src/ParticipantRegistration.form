@@ -467,7 +467,7 @@
                                       <Group type="102" attributes="0">
                                           <Component id="btnUpdate" min="-2" pref="207" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="btnClear1" min="-2" pref="207" max="-2" attributes="0"/>
+                                          <Component id="btnDelete" min="-2" pref="207" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
                                           <Component id="btnRegister" min="-2" pref="207" max="-2" attributes="0"/>
@@ -520,7 +520,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="btnUpdate" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
-                              <Component id="btnClear1" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                              <Component id="btnDelete" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                           <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
@@ -813,7 +813,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnClear1">
+                <Component class="javax.swing.JButton" name="btnDelete">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="cc" red="cc" type="rgb"/>
@@ -826,7 +826,7 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClear1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>

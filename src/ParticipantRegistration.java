@@ -7,6 +7,9 @@
  *
  * @author user
  */
+
+import javax.swing.JOptionPane;
+
 public class ParticipantRegistration extends javax.swing.JFrame {
     
     private static String[][] registeredParticipants = new String[100][5];
@@ -175,9 +178,37 @@ private void clearFields() {
     loadRegistrations();
     loadEventsIntoComboBox();
     displayParticipants();
+
+    tblRegisteredParticipant.getSelectionModel().addListSelectionListener(e -> {
+
+        if (!e.getValueIsAdjusting()) {
+
+            int selectedRow = tblRegisteredParticipant.getSelectedRow();
+
+            if (selectedRow != -1) {
+
+                String id = tblRegisteredParticipant.getValueAt(selectedRow, 0).toString();
+
+                int index = linearSearch(id);
+
+                if (index != -1) {
+
+                    txtRegistrationID.setText(registeredParticipants[index][0]);
+                    txtParticipantName.setText(registeredParticipants[index][1]);
+                    txtEmail.setText(registeredParticipants[index][2]);
+                    txtDate.setText(registeredParticipants[index][3]);
+
+                    cmbSelectEvent.setSelectedItem(registeredParticipants[index][4]);
+                }
+            }
+        }
+        
+        
+    });
 }
     
     private void loadEventsIntoComboBox() {
+
     cmbSelectEvent.removeAllItems();
 
     EventManagement.loadEvents();
@@ -190,8 +221,8 @@ private void clearFields() {
     } else {
         cmbSelectEvent.setEnabled(true);
 
-        for (int i = 0; i < eventNames.length; i++) {
-            cmbSelectEvent.addItem(eventNames[i]);
+        for (String eventName : eventNames) {
+            cmbSelectEvent.addItem(eventName);
         }
     }
 }
@@ -250,7 +281,7 @@ private void clearFields() {
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         btnUpdate = new javax.swing.JButton();
-        btnClear1 = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
 
@@ -553,12 +584,12 @@ private void clearFields() {
             }
         });
 
-        btnClear1.setBackground(new java.awt.Color(204, 204, 255));
-        btnClear1.setText("Delete");
-        btnClear1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnClear1.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setBackground(new java.awt.Color(204, 204, 255));
+        btnDelete.setText("Delete");
+        btnDelete.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClear1ActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -610,7 +641,7 @@ private void clearFields() {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnClear1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -651,7 +682,7 @@ private void clearFields() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClear1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
                 .addComponent(jLabel17)
                 .addGap(13, 13, 13)
@@ -912,9 +943,45 @@ javax.swing.JOptionPane.showMessageDialog(this,
 clearFields();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
-    private void btnClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClear1ActionPerformed
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:                                         
+        int selectedRow = tblRegisteredParticipant.getSelectedRow();
+
+        if (selectedRow == -1) {
+           JOptionPane.showMessageDialog(this,
+            "Please select a registration to delete.");
+        return;
+    }
+
+    String id = tblRegisteredParticipant.getValueAt(selectedRow, 0).toString();
+
+    int confirm = JOptionPane.showConfirmDialog(this,
+        "Are you sure you want to delete this registration?",
+        "Confirm Delete",
+        JOptionPane.YES_NO_OPTION);
+
+    if (confirm == JOptionPane.YES_OPTION) {
+
+        int index = linearSearch(id);
+
+        if (index != -1) {
+
+            for (int i = index; i < registeredCount - 1; i++) {
+                registeredParticipants[i] = registeredParticipants[i + 1];
+            }
+
+            registeredParticipants[registeredCount - 1] = null;
+            registeredCount--;
+
+            saveRegistrations();
+            displayParticipants();
+            clearFields();
+
+            JOptionPane.showMessageDialog(this,
+                "Registration deleted successfully!");
+        }
+    }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -944,7 +1011,7 @@ clearFields();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnClear1;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnRegister;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
