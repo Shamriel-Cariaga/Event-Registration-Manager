@@ -36,6 +36,99 @@ private int linearSearch(String searchID) {
     return -1;
 }
 
+// FILE NAME FOR SAVING REGISTRATIONS
+private static final String REGISTRATION_FILE = "registrations.txt";
+
+// CONVERT TEXT INTO BASE64
+private static String encode(String text) {
+    return java.util.Base64.getEncoder().encodeToString(
+        text.getBytes(java.nio.charset.StandardCharsets.UTF_8)
+    );
+}
+
+// CONVERT BASE64 BACK INTO TEXT
+private static String decode(String text) {
+    return new String(
+        java.util.Base64.getDecoder().decode(text),
+        java.nio.charset.StandardCharsets.UTF_8
+    );
+}
+
+// SAVE REGISTRATIONS TO TEXT FILE
+private static void saveRegistrations() {
+
+    try (java.io.BufferedWriter writer =
+            new java.io.BufferedWriter(
+                new java.io.FileWriter(REGISTRATION_FILE))) {
+
+        for (int i = 0; i < registeredCount; i++) {
+
+            writer.write(
+                encode(registeredParticipants[i][0]) + "," +
+                encode(registeredParticipants[i][1]) + "," +
+                encode(registeredParticipants[i][2]) + "," +
+                encode(registeredParticipants[i][3]) + "," +
+                encode(registeredParticipants[i][4])
+            );
+
+            writer.newLine();
+        }
+
+    } catch (java.io.IOException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            null,
+            "Error saving registrations: " + e.getMessage()
+        );
+    }
+}
+
+// LOAD REGISTRATIONS FROM TEXT FILE
+private static void loadRegistrations() {
+
+    registeredCount = 0;
+
+    java.io.File file = new java.io.File(REGISTRATION_FILE);
+
+    if (!file.exists()) {
+        return;
+    }
+
+    try (java.io.BufferedReader reader =
+            new java.io.BufferedReader(
+                new java.io.FileReader(file))) {
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+
+            String[] data = line.split(",", -1);
+
+            if (data.length == 5 &&
+                registeredCount < registeredParticipants.length) {
+
+                try {
+                    registeredParticipants[registeredCount][0] = decode(data[0]);
+                    registeredParticipants[registeredCount][1] = decode(data[1]);
+                    registeredParticipants[registeredCount][2] = decode(data[2]);
+                    registeredParticipants[registeredCount][3] = decode(data[3]);
+                    registeredParticipants[registeredCount][4] = decode(data[4]);
+
+                    registeredCount++;
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Skipping invalid registration record.");
+                }
+            }
+        }
+
+    } catch (java.io.IOException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            null,
+            "Error loading registrations: " + e.getMessage()
+        );
+    }
+}
+
 private void clearFields() {
     txtRegistrationID.setText("");
     txtParticipantName.setText("");
@@ -56,11 +149,14 @@ private void clearFields() {
      * Creates new form ParticipantRegistration
      */
     public ParticipantRegistration() {
-       initComponents();
-       setLocationRelativeTo(null);
-       loadEventsIntoComboBox();
-       displayParticipants();
+    initComponents();
+    setLocationRelativeTo(null);
+
+    loadRegistrations();
+    loadEventsIntoComboBox();
+    displayParticipants();
 }
+    
     private void loadEventsIntoComboBox() {
     cmbSelectEvent.removeAllItems();
 
@@ -712,6 +808,8 @@ registeredParticipants[registeredCount][4] = event;
 
 registeredCount++;
 
+saveRegistrations();
+
 displayParticipants();
 
 javax.swing.JOptionPane.showMessageDialog(this,
@@ -765,6 +863,8 @@ registeredParticipants[index][1] = name;
 registeredParticipants[index][2] = email;
 registeredParticipants[index][3] = date;
 registeredParticipants[index][4] = cmbSelectEvent.getSelectedItem().toString();
+
+saveRegistrations();
 
 displayParticipants();
 

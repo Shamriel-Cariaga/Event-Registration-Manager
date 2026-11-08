@@ -101,7 +101,9 @@
                   <Component id="jLabel11" min="-2" pref="71" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Component id="jPanel2" pref="465" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnDashboard" min="-2" pref="30" max="-2" attributes="0"/>
@@ -111,7 +113,6 @@
                           <Component id="btnRegistration" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
-                      <Component id="jPanel2" pref="465" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
