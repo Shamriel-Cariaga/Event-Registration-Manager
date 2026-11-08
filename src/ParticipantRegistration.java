@@ -29,9 +29,13 @@ public class ParticipantRegistration extends javax.swing.JFrame {
         });
     }
 }
-private int linearSearch(String searchID) {
+private int linearSearch(String searchValue) {
+
     for (int i = 0; i < registeredCount; i++) {
-        if (registeredParticipants[i][0].equalsIgnoreCase(searchID)) {
+
+        if (registeredParticipants[i][0].equalsIgnoreCase(searchValue)
+                || registeredParticipants[i][1].equalsIgnoreCase(searchValue)) {
+
             return i;
         }
     }
