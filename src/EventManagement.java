@@ -44,6 +44,104 @@ private int linearSearch(String searchID) {
 
     return -1;
 }
+
+// FILE NAME FOR SAVING EVENTS
+private static final String EVENT_FILE = "events.txt";
+
+// CONVERT TEXT INTO BASE64
+private static String encode(String text) {
+    return java.util.Base64.getEncoder().encodeToString(
+        text.getBytes(java.nio.charset.StandardCharsets.UTF_8)
+    );
+}
+
+// CONVERT BASE64 BACK INTO TEXT
+private static String decode(String text) {
+    return new String(
+        java.util.Base64.getDecoder().decode(text),
+        java.nio.charset.StandardCharsets.UTF_8
+    );
+}
+
+// SAVE EVENTS TO TEXT FILE
+private static void saveEvents() {
+
+    try (java.io.BufferedWriter writer =
+            new java.io.BufferedWriter(
+                new java.io.FileWriter(EVENT_FILE))) {
+
+        for (int i = 0; i < eventCount; i++) {
+
+            EventData event = events[i];
+
+            writer.write(
+                encode(event.eventID) + "," +
+                encode(event.eventName) + "," +
+                encode(event.eventDate) + "," +
+                encode(event.eventTime) + "," +
+                encode(event.eventLocation) + "," +
+                encode(event.eventDescription)
+            );
+
+            writer.newLine();
+        }
+
+    } catch (java.io.IOException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            null,
+            "Error saving events: " + e.getMessage()
+        );
+    }
+}
+
+// LOAD EVENTS FROM TEXT FILE
+private static void loadEvents() {
+
+    eventCount = 0;
+
+    java.io.File file = new java.io.File(EVENT_FILE);
+
+    if (!file.exists()) {
+        return;
+    }
+
+    try (java.io.BufferedReader reader =
+            new java.io.BufferedReader(
+                new java.io.FileReader(file))) {
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+
+            String[] data = line.split(",", -1);
+
+            if (data.length == 6 && eventCount < events.length) {
+
+                try {
+                    events[eventCount] = new EventData(
+                        decode(data[0]),
+                        decode(data[1]),
+                        decode(data[2]),
+                        decode(data[3]),
+                        decode(data[4]),
+                        decode(data[5])
+                    );
+
+                    eventCount++;
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Skipping invalid event record.");
+                }
+            }
+        }
+
+    } catch (java.io.IOException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            null,
+            "Error loading events: " + e.getMessage()
+        );
+    }
+}
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EventManagement.class.getName());
 
@@ -52,7 +150,8 @@ private int linearSearch(String searchID) {
      */
     public EventManagement() {
     initComponents();
-
+    
+    loadEvents();
     displayEvents();
 
     // Automatically load selected event into text fields
@@ -508,6 +607,11 @@ events[eventCount] = new EventData(
 
 eventCount++;
 
+saveEvents();
+
+// UPDATE JTABLE
+displayEvents();
+
 // UPDATE JTABLE
 displayEvents();
 
@@ -559,6 +663,8 @@ events[index].eventTime = eventTime;
 events[index].eventLocation = location;
 events[index].eventDescription = description;
 
+saveEvents();
+
 // REFRESH TABLE
 displayEvents();
 
@@ -597,6 +703,8 @@ clearFields();
 
         events[eventCount - 1] = null;
         eventCount--;
+        
+        saveEvents();
 
         // REFRESH TABLE
         displayEvents();
