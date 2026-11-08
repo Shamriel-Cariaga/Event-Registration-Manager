@@ -26,6 +26,29 @@ public class ParticipantRegistration extends javax.swing.JFrame {
         });
     }
 }
+private int linearSearch(String searchID) {
+    for (int i = 0; i < registeredCount; i++) {
+        if (registeredParticipants[i][0].equalsIgnoreCase(searchID)) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+private void clearFields() {
+    txtRegistrationID.setText("");
+    txtParticipantName.setText("");
+    txtEmail.setText("");
+    txtDate.setText("");
+    txtSearch.setText("");
+
+    if (cmbSelectEvent.getItemCount() > 0) {
+        cmbSelectEvent.setSelectedIndex(0);
+    }
+
+    tblRegisteredParticipant.clearSelection();
+}
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ParticipantRegistration.class.getName());
 
@@ -36,6 +59,7 @@ public class ParticipantRegistration extends javax.swing.JFrame {
        initComponents();
        setLocationRelativeTo(null);
        loadEventsIntoComboBox();
+       displayParticipants();
 }
     private void loadEventsIntoComboBox() {
     cmbSelectEvent.removeAllItems();
@@ -51,8 +75,12 @@ public class ParticipantRegistration extends javax.swing.JFrame {
         for (int i = 0; i < eventNames.length; i++) {
             cmbSelectEvent.addItem(eventNames[i]);
         }
+        
     }
+    
+    
 }
+    
     
 
     /**
@@ -591,6 +619,35 @@ public class ParticipantRegistration extends javax.swing.JFrame {
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
         
+        String searchID = txtSearch.getText().trim();
+
+        if (searchID.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+        "Please enter a Registration ID.");
+        return;
+    }
+
+int index = linearSearch(searchID);
+
+if (index == -1) {
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Participant not found.");
+    return;
+}
+
+txtRegistrationID.setText(registeredParticipants[index][0]);
+txtParticipantName.setText(registeredParticipants[index][1]);
+txtEmail.setText(registeredParticipants[index][2]);
+txtDate.setText(registeredParticipants[index][3]);
+
+String event = registeredParticipants[index][4];
+
+cmbSelectEvent.setEnabled(true);
+cmbSelectEvent.setSelectedItem(event);
+
+javax.swing.JOptionPane.showMessageDialog(this,
+    "Participant found!");
+        
 
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -609,15 +666,66 @@ public class ParticipantRegistration extends javax.swing.JFrame {
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
+        
+        clearFields();
        
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
+        String id = txtRegistrationID.getText().trim();
+        String name = txtParticipantName.getText().trim();
+        String email = txtEmail.getText().trim();
+        String date = txtDate.getText().trim();
+
+        if (id.isEmpty() || name.isEmpty() || email.isEmpty() || date.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+        "Please complete all fields.");
+        return;
+    }
+
+if (!cmbSelectEvent.isEnabled() || cmbSelectEvent.getSelectedItem() == null) {
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Please create an event first.");
+    return;
+}
+
+if (registeredCount >= registeredParticipants.length) {
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Registration storage is full.");
+    return;
+}
+
+if (linearSearch(id) != -1) {
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Registration ID already exists.");
+    return;
+}
+
+String event = cmbSelectEvent.getSelectedItem().toString();
+
+registeredParticipants[registeredCount][0] = id;
+registeredParticipants[registeredCount][1] = name;
+registeredParticipants[registeredCount][2] = email;
+registeredParticipants[registeredCount][3] = date;
+registeredParticipants[registeredCount][4] = event;
+
+registeredCount++;
+
+displayParticipants();
+
+javax.swing.JOptionPane.showMessageDialog(this,
+    "Participant registered successfully!");
+
+clearFields();
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
+        Dashboard dashboard = new Dashboard();
+        dashboard.setLocationRelativeTo(null);
+        dashboard.setVisible(true);
+        this.dispose();
 
     }//GEN-LAST:event_btnBackActionPerformed
 
@@ -627,6 +735,43 @@ public class ParticipantRegistration extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
+        
+        String id = txtRegistrationID.getText().trim();
+        String name = txtParticipantName.getText().trim();
+        String email = txtEmail.getText().trim();
+        String date = txtDate.getText().trim();
+
+        if (id.isEmpty() || name.isEmpty() || email.isEmpty() || date.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+        "Please complete all fields.");
+        return;
+    }
+
+if (!cmbSelectEvent.isEnabled() || cmbSelectEvent.getSelectedItem() == null) {
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Please select an event.");
+    return;
+}
+
+int index = linearSearch(id);
+
+if (index == -1) {
+    javax.swing.JOptionPane.showMessageDialog(this,
+        "Participant not found. Please search first.");
+    return;
+}
+
+registeredParticipants[index][1] = name;
+registeredParticipants[index][2] = email;
+registeredParticipants[index][3] = date;
+registeredParticipants[index][4] = cmbSelectEvent.getSelectedItem().toString();
+
+displayParticipants();
+
+javax.swing.JOptionPane.showMessageDialog(this,
+    "Participant information updated successfully!");
+
+clearFields();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     /**
